@@ -43,7 +43,6 @@ int main(int argc, char **argv) {
         close(2); /* close stderr, and see what happens */
         sprintf(fname, "afile%05d", i);
         FILE *f = fopen(fname, "w");
-        unlink(fname);
         n_files_open += 1;
     }
 
@@ -51,7 +50,7 @@ int main(int argc, char **argv) {
     fprintf(stdout, "Pausing just hit return"); fflush(stdout);
     char c;
     fscanf(stdin, "%c", &c);
-    fscanf(stdin, "%c", &c);
+    fscanf(stdin, "%c", &c); /* why did I do this 2 times here??? It's not random. */
 
     int std_err_ret = 0;
     std_err_ret = fprintf(stderr,"Stderr is closed!\n");
@@ -59,6 +58,10 @@ int main(int argc, char **argv) {
         fprintf(stdout, "Could not print to stderr, error = %d\n", std_err_ret);
     } else {
         fprintf(stdout, "Printed %d chars to stderr\n", std_err_ret);
+    }
+
+    if (close_stderr) {
+        unlink(fname);
     }
 
     return 0;
