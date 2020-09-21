@@ -3,14 +3,21 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 int main(int argc, char **argv) {
     char* fname = malloc(1024);
     pid_t pid = getpid();
     srandom((unsigned int)pid);
     int i, n;
+    bool close_stderr = false;
+
+    if (argc > 1) {
+        close_stderr = true;
+    }
 
     fprintf(stdout, "My pid = %d\n", (int)pid);
+    fprintf(stdout, "Closing stderr = %d\n", (int)close_stderr);
     fprintf(stdout, "Type an integer: "); fflush(stdout);
     fscanf(stdin, "%d", &n);
     fprintf(stderr, "End of Scan\n");
@@ -32,11 +39,13 @@ int main(int argc, char **argv) {
         }
     }
 
-    close(2); /* close stderr, and see what happens */
-    sprintf(fname, "afile%05d", i);
-    FILE *f = fopen(fname, "w");
-    unlink(fname);
-    fclose(f);
+    if (close_stderr) {
+        close(2); /* close stderr, and see what happens */
+        sprintf(fname, "afile%05d", i);
+        FILE *f = fopen(fname, "w");
+        unlink(fname);
+        n_files_open += 1;
+    }
 
     fprintf(stdout, "There are %d files still open\n", n_files_open); fflush(stdout);
     fprintf(stdout, "Pausing just hit return"); fflush(stdout);
@@ -46,7 +55,11 @@ int main(int argc, char **argv) {
 
     int std_err_ret = 0;
     std_err_ret = fprintf(stderr,"Stderr is closed!\n");
-    fprintf(stdout, "Could not print to stderr, error = %d\n", std_err_ret);
+    if (std_err_ret < 0) {
+        fprintf(stdout, "Could not print to stderr, error = %d\n", std_err_ret);
+    } else {
+        fprintf(stdout, "Printed %d chars to stderr\n", std_err_ret);
+    }
 
     return 0;
 
