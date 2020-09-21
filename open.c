@@ -60,9 +60,7 @@ int main(int argc, char **argv) {
         fprintf(stdout, "Printed %d chars to stderr\n", std_err_ret);
     }
 
-    if (close_stderr) {
-        unlink(fname);
-    }
+    unlink(fname);
 
     return 0;
 

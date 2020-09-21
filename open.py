@@ -48,7 +48,6 @@ if __name__ == '__main__':
     else:
         print(f"Printed {std_err_ret} chars to stderr", file=sys.stdout)
 
-    if close_stderr:
-        os.unlink(fname)
+    os.unlink(fname)
 
 # vim: ai sw=4 ts=4 et showmatch
