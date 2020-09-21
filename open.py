@@ -13,7 +13,12 @@ if __name__ == '__main__':
     print(f"Closing stderr = {close_stderr}", file=sys.stderr)
     print(f"Type an integer: ", file=sys.stderr); sys.stderr.flush()
     stuff = input() # read from stdin
-    n = int(stuff)
+    try:
+        n = int(stuff)
+    except ValueError:
+        print("Need valid integer", file=sys.stderr)
+        sys.exit(1)
+
     print(f"End of scan", file=sys.stderr)
     
     n_files_open = 0
@@ -31,10 +36,9 @@ if __name__ == '__main__':
             print(i, file=f)
             f.flush()
 
-
+    fname = f'afile{i:05d}'
     if close_stderr:
         sys.stderr.close()
-        fname = f'afile{i:05d}'
         _ = open(fname, 'w')
         n_files_open += 1
 
@@ -42,12 +46,16 @@ if __name__ == '__main__':
     print(f'Pausing, just hit return', file=sys.stdout); sys.stdout.flush()
     input()
 
-    std_err_ret = sys.stderr.write('Stderr is closed!\n')
+    try:
+        os.unlink(fname)
+    except FileNotFoundError:
+        pass
+
+    std_err_ret = sys.stderr.write('Stderr is closed?\n')
     if std_err_ret < 1:
         print(f"Could not print to stderr, error = {std_err_ret}", file=sys.stdout)
     else:
         print(f"Printed {std_err_ret} chars to stderr", file=sys.stdout)
 
-    os.unlink(fname)
 
 # vim: ai sw=4 ts=4 et showmatch

@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     fscanf(stdin, "%c", &c); /* why did I do this 2 times here??? It's not random. */
 
     int std_err_ret = 0;
-    std_err_ret = fprintf(stderr,"Stderr is closed!\n");
+    std_err_ret = fprintf(stderr,"Stderr is closed?\n");
     if (std_err_ret < 0) {
         fprintf(stdout, "Could not print to stderr, error = %d\n", std_err_ret);
     } else {
