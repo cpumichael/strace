@@ -18,7 +18,7 @@ the following:
    is really all that matters.
 9. A brief introduction to separation between Linux's user space
    and kernel space.
-10. The difference between buffered and unbuffered IO.
+10. The abbreviated difference between buffered and unbuffered IO.
 11. The relationship between python and C and how to port a C
     application to python.
 
